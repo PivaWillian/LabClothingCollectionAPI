@@ -4,8 +4,8 @@ namespace LabClothingCollectionAPI.Services
 {
     public interface ILabClothingRepository
     {
+        Task<IEnumerable<User>> GetUsersAsync(Status? status);
         Task<User?> GetUserAsync(int id);
-        IEnumerable<User> GetUsers();
         Task<bool> SaveChangesAsync();
         void CreateUser(User user);
     }

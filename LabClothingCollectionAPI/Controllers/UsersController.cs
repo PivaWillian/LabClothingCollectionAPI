@@ -20,17 +20,22 @@ namespace LabClothingCollectionAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(Status? status = null)
         {
-            var usersCollection =  _labRepository.GetUsers();
+            var usersCollection = await _labRepository.GetUsersAsync(status);
             var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
             return Ok(usersToReturn);
+            
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserAsync(int id)
         {
             var user = await _labRepository.GetUserAsync(id);
+            if(user == null)
+            {
+                return NotFound("Identificador não corresponde há um usuário.");
+            }
             return Ok(user);
         }
 
