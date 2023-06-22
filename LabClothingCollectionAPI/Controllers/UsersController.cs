@@ -42,7 +42,18 @@ namespace LabClothingCollectionAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto user)
         {
+            IEnumerable<User> users = await _labRepository.GetUsersAsync(null);
             var userForCreation = _mapper.Map<User>(user);
+            var userCheck = users.Where(x => x.CPF_CNPJ == user.CPF_CNPJ).FirstOrDefault();
+            if(userCheck != null)
+            {
+                return Conflict("CPF/CNPJ já cadastrado");
+            }
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Dados inválidos.");
+            }
+
             _labRepository.CreateUser(userForCreation);
             var userToReturn = _mapper.Map<UserDto>(userForCreation);//verificar se ID Não vem sem número
             
