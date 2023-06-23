@@ -20,12 +20,21 @@ namespace LabClothingCollectionAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        {
+            var usersCollection = await _labRepository.GetUsersAsync();
+            var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
+            return Ok(usersToReturn);
+            
+        }
+
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(Status? status = null)
         {
             var usersCollection = await _labRepository.GetUsersAsync(status);
             var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
             return Ok(usersToReturn);
-            
+
         }
 
         [HttpGet("{id}")]
@@ -79,18 +88,20 @@ namespace LabClothingCollectionAPI.Controllers
         [HttpPut("{id}/status")]
         public async Task<ActionResult<UserDto>> UpdateUserStatus(int id, string status)
         {
+            Enum.TryParse(status, out Status myStatus);
             var userEntity = await _labRepository.GetUserAsync(id);
             if (userEntity == null)
             {
                 return NotFound("Usuário com esse identificador inexistente.");
             }
 
-            var userModel = _mapper.Map<UserDto>(userEntity);
-            if(status != null)
+            //var userModel = _mapper.Map<UserDto>(userEntity);
+            if(status == null)
             {
-                userModel.Status = status;
+                return BadRequest("Valores repassados são inválidos.");
             }
-            var userUpdated = _mapper.Map<User>(userModel);
+            //var userUpdated = _mapper.Map<User>(userModel);
+            userEntity.Status = myStatus;
             await _labRepository.SaveChangesAsync();
 
             return NoContent();

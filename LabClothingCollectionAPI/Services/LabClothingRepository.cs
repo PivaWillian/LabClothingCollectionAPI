@@ -14,9 +14,14 @@ namespace LabClothingCollectionAPI.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
         #region
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
         public async Task<IEnumerable<User>> GetUsersAsync(Status? status)
         {
-            if(status != null)
+            if (status != null)
             {
                 return await _context.Users.Where(c => c.Status == status).ToListAsync();
             }
@@ -49,9 +54,19 @@ namespace LabClothingCollectionAPI.Services
         {
             return await _context.Collections.ToListAsync();
         }
+
+        public async Task<IEnumerable<Collection>> GetCollectionsAsync(Status status)
+        {
+            return await _context.Collections.Where(c => c.Status == status).ToListAsync();
+        }
         public async Task<Collection?> GetCollectionAsync(int collectionId)
         {
             return await _context.Collections.Where(c => c.Id == collectionId).FirstOrDefaultAsync();
+        }
+
+        public void CreateCollection(Collection collection)
+        {
+            _context.Collections.Add(collection);
         }
         #endregion
         public async Task<bool> SaveChangesAsync()
