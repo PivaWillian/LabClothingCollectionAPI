@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LabClothingCollectionAPI.Controllers
 {
+    [ApiController]
+    [Route("api/modelos")]
     public class ModelsController : ControllerBase
     {
         private readonly ILabClothingRepository _labClothing;
@@ -16,24 +18,37 @@ namespace LabClothingCollectionAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [HttpGet("api/collection/{collectionid}/models")]
-        public ActionResult<IEnumerable<ModelDto>> GetModels(int collectionId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels()
         {
-            var models = _labClothing.GetModels(collectionId);
+            var models = await _labClothing.GetModelsAsync();
             return Ok(_mapper.Map<IEnumerable<ModelDto>>(models));
         }
 
-        [HttpGet("api/collection/{collectionid/models/{id}")]
-        public async Task<ActionResult<ModelDto>> GetModel(int collectionId, int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ModelDto?>> GetModel(int modelId)
         {
-            var collection = _labClothing.GetCollection(collectionId);
-            if (collection == null)
+            var model = await _labClothing.GetModelAsync(modelId);
+            return Ok(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ModelDto>> CreateModel(ModelForCreationDto modelForCreation)
+        {
+            if (!ModelState.IsValid)
             {
-                return NotFound("Coleção informada não existe");
+                return BadRequest("Dados informados inválidos");
+            }
+            var modelsForComparison = await _labClothing.GetModelsAsync();
+            foreach(var model in modelsForComparison)
+            {
+                if (model.Name == modelForCreation.Name)
+                {
+                    return Conflict("Nome de modelo já existente");
+                }
             }
 
-            var model = await _labClothing.GetModelAsync(collectionId, id);
-            return Ok(_mapper.Map<ModelDto>(model));
+            return Ok();
         }
     }
 }
