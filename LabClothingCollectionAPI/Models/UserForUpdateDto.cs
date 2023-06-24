@@ -8,15 +8,16 @@ namespace LabClothingCollectionAPI.Models
         [MaxLength(100)]
         public string FullName { get; set; } = string.Empty;
         [Required]
-        [MaxLength(10)]
+        [MaxLength(50)]
         public string Gender { get; set; } = string.Empty;
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Range(typeof(DateTime), "01/01/1990", "today", ErrorMessage = "Invalid birth date")]
+        [Range(typeof(DateTime), "01/01/1990", "23/06/2023", ErrorMessage = "Invalid birth date")]
         public DateTime BirthDate { get; set; }
         [Required]
-        [MaxLength(15)]
+        [MaxLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
+        [Required]
         [EnumDataType(typeof(UserType))]
         public UserType Type { get; set; }
     }

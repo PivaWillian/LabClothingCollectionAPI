@@ -6,12 +6,6 @@
     Outro = 4
 }
 
-public enum Status
-{
-    Ativo = 1,
-    Inativo = 0
-}
-
 public enum Season
 {
     Summer = 1,
@@ -38,4 +32,10 @@ public enum Layout
     Bordado = 1,
     Estampado = 2,
     Liso = 3
+}
+
+public enum Status
+{
+    Ativo = 1,
+    Inativo = 2
 }

@@ -53,6 +53,8 @@ namespace LabClothingCollectionAPI.DbContexts
                     Type = UserType.Administrador,
                     Status = Status.Ativo
                 });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -20,18 +20,16 @@ namespace LabClothingCollectionAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(string? status)
         {
-            var usersCollection = await _labRepository.GetUsersAsync();
-            var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
-            return Ok(usersToReturn);
-            
-        }
+            if(status == null)
+            {
+                var users = await _labRepository.GetUsersAsync();
+                return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(Status? status = null)
-        {
-            var usersCollection = await _labRepository.GetUsersAsync(status);
+            Enum.TryParse(status, out Status myStatus);
+            var usersCollection = await _labRepository.GetUsersAsync(myStatus);
             var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
             return Ok(usersToReturn);
 
@@ -51,9 +49,9 @@ namespace LabClothingCollectionAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto user)
         {
-            IEnumerable<User> users = await _labRepository.GetUsersAsync(null);
+            IEnumerable<User> users = await _labRepository.GetUsersAsync();
             var userForCreation = _mapper.Map<User>(user);
-            var userCheck = users.Where(x => x.CPF_CNPJ == user.CPF_CNPJ).FirstOrDefault();
+            var userCheck = users.Where(x => x.DocNumber == user.DocNumber).FirstOrDefault();
             if(userCheck != null)
             {
                 return Conflict("CPF/CNPJ já cadastrado");

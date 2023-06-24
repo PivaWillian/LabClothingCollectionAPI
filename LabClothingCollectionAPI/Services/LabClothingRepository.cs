@@ -21,11 +21,8 @@ namespace LabClothingCollectionAPI.Services
 
         public async Task<IEnumerable<User>> GetUsersAsync(Status? status)
         {
-            if (status != null)
-            {
-                return await _context.Users.Where(c => c.Status == status).ToListAsync();
-            }
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Where(c => c.Status == status).ToListAsync();
+            
         }
 
         public async Task<User?> GetUserAsync(int userId)

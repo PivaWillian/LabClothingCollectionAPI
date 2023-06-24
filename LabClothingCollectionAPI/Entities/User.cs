@@ -11,23 +11,23 @@ namespace LabClothingCollectionAPI.Entities
         public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        public string FullName { get; set; }
+        public string FullName { get; set; } = string.Empty;
         [Required]
         [MaxLength(50)]
-        public string Gender { get; set; }
+        public string Gender { get; set; } = string.Empty;
         [Required]
         [MaxLength(50)]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Range(typeof(DateTime), "01/01/1990", "today", ErrorMessage = "Invalid birth date")]
+        [Range(typeof(DateTime), "01/01/1990", "23/06/2023", ErrorMessage = "Invalid birth date")]
         public DateTime BirthDate { get; set; }
         [Required]
         [MaxLength(20)]
-        public string CPF_CNPJ { get; set; }
+        public string DocNumber { get; set; } = string.Empty;
         [Required]
         [MaxLength(20)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
         [Required]
         [EnumDataType(typeof(UserType))]
         public UserType Type { get; set; }
@@ -35,12 +35,12 @@ namespace LabClothingCollectionAPI.Entities
         [EnumDataType(typeof(Status))]
         public Status Status { get; set; }
 
-        public User(string fullName, string gender, string email, string cpf_cnpj, string phoneNumber)
+        public User(string fullName, string gender, string email, string docNumber, string phoneNumber)
         {
             FullName = fullName;
             Gender = gender;
             Email = email;
-            CPF_CNPJ = cpf_cnpj;
+            DocNumber = docNumber;
             PhoneNumber = phoneNumber;
         }
     }

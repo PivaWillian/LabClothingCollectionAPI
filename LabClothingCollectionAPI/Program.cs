@@ -15,6 +15,7 @@ builder.Services.AddDbContext<LabClothingContext>(DbContextOptions => DbContextO
 .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=C:\\USERS\\2997703\\SOURCE\\REPOS\\LABCLOTHINGCOLLECTIONAPI\\LABCLOTHINGCOLLECTIONAPI\\LABCLOTHINGCOLLECTIONDB.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
 
 builder.Services.AddScoped<ILabClothingRepository, LabClothingRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
