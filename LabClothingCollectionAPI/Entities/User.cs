@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Entities
 {
@@ -29,19 +30,21 @@ namespace LabClothingCollectionAPI.Entities
         [MaxLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
         [Required]
-        [EnumDataType(typeof(UserType))]
-        public UserType Type { get; set; }
+        [MaxLength(20)]
+        public string UserType { get; set; } = string.Empty;
         [Required]
-        [EnumDataType(typeof(Status))]
-        public Status Status { get; set; }
+        [MaxLength(20)]
+        public string Status { get; set; } = string.Empty;
 
-        public User(string fullName, string gender, string email, string docNumber, string phoneNumber)
+        public User(string fullName, string gender, string email, string docNumber, string phoneNumber, string userType, string status)
         {
             FullName = fullName;
             Gender = gender;
             Email = email;
             DocNumber = docNumber;
             PhoneNumber = phoneNumber;
+            UserType = userType;
+            Status = status;
         }
     }
 }

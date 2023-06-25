@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Models
 {

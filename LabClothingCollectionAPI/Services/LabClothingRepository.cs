@@ -2,6 +2,7 @@
 using LabClothingCollectionAPI.Entities;
 using LabClothingCollectionAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Services
 {
@@ -19,7 +20,7 @@ namespace LabClothingCollectionAPI.Services
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync(Status? status)
+        public async Task<IEnumerable<User>> GetUsersAsync(string? status)
         {
             return await _context.Users.Where(c => c.Status == status).ToListAsync();
             

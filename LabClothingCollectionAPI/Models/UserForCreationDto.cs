@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
+using LabClothingCollectionAPI.Enums;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LabClothingCollectionAPI.Models
 {
@@ -25,11 +27,17 @@ namespace LabClothingCollectionAPI.Models
         [Required]
         [MaxLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
+        //[Required]
+        //[EnumDataType(typeof(UserType))]
+        //public UserType Type { get; set; }
+        //[Required]
+        //[EnumDataType(typeof(Status))]
+        //public Status Status { get; set; }
         [Required]
-        [EnumDataType(typeof(UserType))]
-        public UserType Type { get; set; }
+        [MaxLength(20)]
+        public string UserType { get; set; } = string.Empty;
         [Required]
-        [EnumDataType(typeof(Status))]
-        public Status Status { get; set; }
+        [MaxLength(20)]
+        public string Status { get; set; } = string.Empty;
     }
 }

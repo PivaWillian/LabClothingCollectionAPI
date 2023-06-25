@@ -3,6 +3,7 @@ using LabClothingCollectionAPI.Models;
 using LabClothingCollectionAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using LabClothingCollectionAPI.Entities;
+using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Controllers
 {
@@ -28,8 +29,7 @@ namespace LabClothingCollectionAPI.Controllers
                 return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
             }
 
-            Enum.TryParse(status, out Status myStatus);
-            var usersCollection = await _labRepository.GetUsersAsync(myStatus);
+            var usersCollection = await _labRepository.GetUsersAsync(status);
             var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(usersCollection);
             return Ok(usersToReturn);
 
@@ -47,10 +47,18 @@ namespace LabClothingCollectionAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserDto>> CreateUser(UserForCreationDto user)
+        public async Task<ActionResult<UserDto>> CreateUser([FromBody]UserForCreationDto user)
         {
+            if(user.UserType != "Administrador" && user.UserType != "Gerente" 
+                && user.UserType != "Criador" && user.UserType != "Outro")
+            {
+                return BadRequest("Tipo do usuário inválido");
+            }
+            if(user.Status != "Ativo" && user.Status != "Inativo")
+            {
+                return BadRequest("Status inválido");
+            }
             IEnumerable<User> users = await _labRepository.GetUsersAsync();
-            var userForCreation = _mapper.Map<User>(user);
             var userCheck = users.Where(x => x.DocNumber == user.DocNumber).FirstOrDefault();
             if(userCheck != null)
             {
@@ -60,11 +68,12 @@ namespace LabClothingCollectionAPI.Controllers
             {
                 return BadRequest("Dados inválidos.");
             }
-
+            var userForCreation = _mapper.Map<User>(user);
             _labRepository.CreateUser(userForCreation);
-            var userToReturn = _mapper.Map<UserDto>(userForCreation);//verificar se ID Não vem sem número
-            
-            return CreatedAtRoute("CreateUser", new { userId = userToReturn.Id }, userToReturn);
+            await _labRepository.SaveChangesAsync();
+            var userToReturn = _mapper.Map<UserDto>(userForCreation);
+
+            return Created(@"http://localhost7258/api/usuarios/", $"id = {userToReturn.Id} e tipo = {userToReturn.UserType}" );
         }
 
         [HttpPut("{id}")]
@@ -75,18 +84,21 @@ namespace LabClothingCollectionAPI.Controllers
                 return BadRequest("Informações repassadas inválidas");
             }
             var userEntity = await _labRepository.GetUserAsync(id);
-            if(userEntity != null)
+            if(userEntity == null)
             {
                 return NotFound("Número de registro inexistente");
             }
 
-            return Ok();
+            _mapper.Map(userForUpdate, userEntity);
+            await _labRepository.SaveChangesAsync();
+
+            return Ok($"Dados alterados {userForUpdate.FullName}, {userForUpdate.Gender}, {userForUpdate.BirthDate}, {userForUpdate.PhoneNumber}"+
+                $" {userForUpdate.UserType}");
         }
 
         [HttpPut("{id}/status")]
-        public async Task<ActionResult<UserDto>> UpdateUserStatus(int id, string status)
+        public async Task<ActionResult<UserDto>> UpdateUserStatus(int id, [FromBody]string status)
         {
-            Enum.TryParse(status, out Status myStatus);
             var userEntity = await _labRepository.GetUserAsync(id);
             if (userEntity == null)
             {
@@ -94,15 +106,15 @@ namespace LabClothingCollectionAPI.Controllers
             }
 
             //var userModel = _mapper.Map<UserDto>(userEntity);
-            if(status == null)
+            if(status == null || (status != "Ativo" && status != "Inativo"))
             {
                 return BadRequest("Valores repassados são inválidos.");
             }
             //var userUpdated = _mapper.Map<User>(userModel);
-            userEntity.Status = myStatus;
+            userEntity.Status = status;
             await _labRepository.SaveChangesAsync();
 
-            return NoContent();
+            return Ok($"Novo status = {status}");
         }
     }
 }

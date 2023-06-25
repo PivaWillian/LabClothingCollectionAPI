@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Models
 {
@@ -18,7 +19,7 @@ namespace LabClothingCollectionAPI.Models
         [MaxLength(20)]
         public string PhoneNumber { get; set; } = string.Empty;
         [Required]
-        [EnumDataType(typeof(UserType))]
-        public UserType Type { get; set; }
+        [MaxLength(20)]
+        public string UserType { get; set; } = string.Empty;
     }
 }

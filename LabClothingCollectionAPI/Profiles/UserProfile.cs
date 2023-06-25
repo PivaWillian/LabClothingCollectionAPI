@@ -11,6 +11,8 @@ namespace LabClothingCollectionAPI.Profiles
             CreateMap<Models.UserDto, Entities.User>();
             CreateMap<Models.UserForCreationDto, Entities.User>();
             CreateMap<Entities.User, Models.UserForCreationDto>();
+            CreateMap<Models.UserForUpdateDto, Entities.User>();
+            CreateMap<Entities.User, Models.UserForUpdateDto>();
         }
     }
 }

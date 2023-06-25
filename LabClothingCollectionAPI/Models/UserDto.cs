@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using LabClothingCollectionAPI.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace LabClothingCollectionAPI.Models
@@ -12,7 +12,7 @@ namespace LabClothingCollectionAPI.Models
         public DateTime BirthDate { get; set; }
         public string DocNumber { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public UserType Type { get; set; }
-        public Status Status { get; set; }
+        public string UserType { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
     }
 }
