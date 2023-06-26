@@ -20,6 +20,12 @@ namespace LabClothingCollectionAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Get all collections or all the collections with the same status
+        /// </summary>
+        /// <param name="status">The status desired</param>
+        /// <returns>A set of collections</returns>
+        /// <response code="200">Returns the asked set of collections</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CollectionDto>>> GetCollections(Status? status)
         {
@@ -32,6 +38,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<CollectionDto>>(collections));
         }
 
+        /// <summary>
+        /// Method used to get a single collection
+        /// </summary>
+        /// <param name="id">The id of the collection</param>
+        /// <returns>The desired collection</returns>
+        /// <response code="200">The desired collection</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<CollectionDto>> GetCollection(int id)
         {
@@ -43,6 +55,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(_mapper.Map<CollectionDto>(collection));
         }
 
+        /// <summary>
+        /// Method used to create a collection
+        /// </summary>
+        /// <param name="collection">A set of values needed to create a collection</param>
+        /// <returns>The newly created collection</returns>
+        /// <response code="201">The new collection</response>
         [HttpPost]
         public async Task<ActionResult<CollectionForCreationDto>> CreateCollection(CollectionForCreationDto collection)
         {
@@ -65,6 +83,13 @@ namespace LabClothingCollectionAPI.Controllers
             return Created(@"http://localhost7258/api/colecoes", collectionToCreate);
         }
 
+        /// <summary>
+        /// Method used to change a collection attributes
+        /// </summary>
+        /// <param name="id">The id of the collection</param>
+        /// <param name="collectionForUpdate">The new values of the collection</param>
+        /// <returns>The changed collection</returns>
+        /// <response code="200">The changed collection</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<CollectionDto>> UpdateCollection(int id, CollectionForUpdateDto collectionForUpdate)
         {
@@ -83,6 +108,14 @@ namespace LabClothingCollectionAPI.Controllers
 
             return Ok(collectionEntity);
         }
+        
+        /// <summary>
+        ///Method used to change the status of a collection 
+        /// </summary>
+        /// <param name="id">The id of the collection</param>
+        /// <param name="status">The new status</param>
+        /// <returns>The changed status</returns>
+        /// <response code="200">The new status</response>
 
         [HttpPut("{id}/status")]
         public async Task<ActionResult<UserDto>> UpdateCollectinStatus(int id, [FromBody]Status status)
@@ -103,6 +136,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok($"Novo status = {collectionEntity.Status}");
         }
 
+        /// <summary>
+        /// Method used to delete a collection. All models related will also be deleted
+        /// </summary>
+        /// <param name="id">The id of the collection</param>
+        /// <returns>No content</returns>
+        /// <response code="204">No content in case of success</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCollection(int id)
         {

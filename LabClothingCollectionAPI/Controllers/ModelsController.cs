@@ -20,6 +20,12 @@ namespace LabClothingCollectionAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        ///Method user to get all the models by layout or a full list
+        /// </summary>
+        /// <param name="layout">The layout of the models</param>
+        /// <returns>The list of models</returns>
+        /// <response code="200">Return the asked model collection</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels(Layout? layout)
         {
@@ -32,6 +38,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(_mapper.Map<IEnumerable<ModelDto>>(models));
         }
 
+        /// <summary>
+        /// Method used to get a single model in the database
+        /// </summary>
+        /// <param name="id">The id number of the desired model</param>
+        /// <returns>The model asked by the user</returns>
+        /// <response code="200">Returns the asked model</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<ModelDto?>> GetModel(int id)
         {
@@ -43,6 +55,13 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// Creates a model with given values
+        /// A model can only be created if the collection it belongs already exist
+        /// </summary>
+        /// <param name="modelForCreation">An object used to create a new model</param>
+        /// <returns>The created model</returns>
+        /// <response code="201">The newly created model</response>
         [HttpPost]
         public async Task<ActionResult<ModelDto>> CreateModel(ModelForCreationDto modelForCreation)
         {
@@ -66,6 +85,13 @@ namespace LabClothingCollectionAPI.Controllers
             return Created(@"http://localhost7258/api/modelos", modelToReturn);
         }
 
+        /// <summary>
+        /// Method used to change a model's values
+        /// </summary>
+        /// <param name="id">The id of the model</param>
+        /// <param name="modelForUpdate">The new values</param>
+        /// <returns>The model with changed values</returns>
+        /// <response code="200">The model with new attributes</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<ModelDto>> UpdateModel(int id, ModelForUpdateDto modelForUpdate)
         {
@@ -85,6 +111,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(modelEntity);
         }
 
+        /// <summary>
+        /// Method used to delete a model
+        /// </summary>
+        /// <param name="id">The id of the model to delete</param>
+        /// <returns>No Content</returns>
+        /// <reponse code="204">The object has been successfully deleted</reponse>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteModel(int id)
         {

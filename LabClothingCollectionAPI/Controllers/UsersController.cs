@@ -20,6 +20,12 @@ namespace LabClothingCollectionAPI.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Method use to get the users' list
+        /// </summary>
+        /// <param name="status">You can search users by status by passing a query param</param>
+        /// <returns>An array of users</returns>
+        /// <response code="200">Return the requested users' list</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(string? status)
         {
@@ -35,6 +41,12 @@ namespace LabClothingCollectionAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Method used to get a single user
+        /// </summary>
+        /// <param name="id">The user's id</param>
+        /// <returns>A single user with the selected id</returns>
+        /// <response code="200">Return the requested user</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserAsync(int id)
         {
@@ -46,6 +58,12 @@ namespace LabClothingCollectionAPI.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Create an user with given values
+        /// </summary>
+        /// <param name="user">An user object required for creation</param>
+        /// <returns>The newly created user</returns>
+        /// <response code="201">Returns the created user's data</response>
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser([FromBody]UserForCreationDto user)
         {
@@ -76,6 +94,13 @@ namespace LabClothingCollectionAPI.Controllers
             return Created(@"http://localhost7258/api/usuarios/", $"id = {userToReturn.Id} e tipo = {userToReturn.UserType}" );
         }
 
+        /// <summary>
+        /// Method used to change the user's attributes
+        /// </summary>
+        /// <param name="id">The id of the desired user</param>
+        /// <param name="userForUpdate">An object with the new values</param>
+        /// <returns>The updated user.</returns>
+        /// <response code="200">Returns the user's new data values</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id, UserForUpdateDto userForUpdate)
         {
@@ -96,6 +121,13 @@ namespace LabClothingCollectionAPI.Controllers
                 $" {userForUpdate.UserType}");
         }
 
+        /// <summary>
+        /// Method used to change the user's status
+        /// </summary>
+        /// <param name="id">The user's id</param>
+        /// <param name="status">The status value</param>
+        /// <returns>The new status</returns>
+        /// <response code="200">The new status of the user</response>
         [HttpPut("{id}/status")]
         public async Task<ActionResult<UserDto>> UpdateUserStatus(int id, [FromBody]string status)
         {
