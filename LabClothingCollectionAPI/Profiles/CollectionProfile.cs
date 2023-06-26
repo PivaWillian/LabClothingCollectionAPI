@@ -9,6 +9,7 @@ namespace LabClothingCollectionAPI.Profiles
             CreateMap<Entities.Collection, Models.CollectionDto>();
             CreateMap<Models.CollectionDto, Entities.Collection>();
             CreateMap<Models.CollectionForCreationDto, Entities.Collection>();
+            CreateMap<Models.CollectionForUpdateDto, Entities.Collection>();
         }
     }
 }

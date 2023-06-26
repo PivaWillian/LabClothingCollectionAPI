@@ -15,12 +15,11 @@ namespace LabClothingCollectionAPI.Models
         [MaxLength(50)]
         [Required]
         public string Brand { get; set; } = string.Empty;
-        [MaxLength(20)]
         [Required]
-        public decimal Budget { get; set; }
+        public double Budget { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [Range(typeof(DateTime), "01/01/1990", "today", ErrorMessage = "Invalid release date")]
+        [Range(typeof(DateTime), "01/01/1990", "23/06/2023", ErrorMessage = "Invalid release date")]
         public DateTime ReleaseDate { get; set; }
         [Required]
         [EnumDataType(typeof(Season))]

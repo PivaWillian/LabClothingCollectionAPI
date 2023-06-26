@@ -3,6 +3,7 @@ using LabClothingCollectionAPI.Entities;
 using LabClothingCollectionAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using LabClothingCollectionAPI.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LabClothingCollectionAPI.Services
 {
@@ -46,6 +47,11 @@ namespace LabClothingCollectionAPI.Services
         {
             return await _context.Models.Where(c => c.Id == modelId).FirstOrDefaultAsync();
         }
+
+        public void CreateModel(Model model)
+        {
+            _context.Models.Add(model);
+        }
         #endregion
         #region
         public async Task<IEnumerable<Collection>> GetCollectionsAsync()
@@ -53,7 +59,7 @@ namespace LabClothingCollectionAPI.Services
             return await _context.Collections.ToListAsync();
         }
 
-        public async Task<IEnumerable<Collection>> GetCollectionsAsync(Status status)
+        public async Task<IEnumerable<Collection>> GetCollectionsAsync(Status? status)
         {
             return await _context.Collections.Where(c => c.Status == status).ToListAsync();
         }
@@ -61,6 +67,12 @@ namespace LabClothingCollectionAPI.Services
         {
             return await _context.Collections.Where(c => c.Id == collectionId).FirstOrDefaultAsync();
         }
+
+        public void RemoveCollection(Collection collection)
+        {
+            _context.Collections.Remove(collection);
+        }
+        
 
         public void CreateCollection(Collection collection)
         {

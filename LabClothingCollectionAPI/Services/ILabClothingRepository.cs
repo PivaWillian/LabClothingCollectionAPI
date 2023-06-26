@@ -12,9 +12,10 @@ namespace LabClothingCollectionAPI.Services
         Task<IEnumerable<Model>> GetModelsAsync();
         Task<Model?> GetModelAsync(int modelId);
         Task<IEnumerable<Collection>> GetCollectionsAsync();
-        Task<IEnumerable<Collection>> GetCollectionsAsync(Status status);
+        Task<IEnumerable<Collection>> GetCollectionsAsync(Status? status);
         void CreateCollection(Collection collection);
         Task<Collection?> GetCollectionAsync(int collectionId);
+        void RemoveCollection(Collection collection);
         Task<bool> SaveChangesAsync();
     }
 }

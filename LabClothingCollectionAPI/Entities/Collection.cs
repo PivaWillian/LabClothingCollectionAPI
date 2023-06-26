@@ -20,7 +20,7 @@ namespace LabClothingCollectionAPI.Entities
         public string Brand { get; set; }
         [Required]
         [MaxLength(20)]
-        public decimal Budget { get; set; }
+        public double Budget { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [Range(typeof(DateTime), "01/01/1990", "today", ErrorMessage = "Invalid release date")]
         public DateTime ReleaseDate { get; set; }

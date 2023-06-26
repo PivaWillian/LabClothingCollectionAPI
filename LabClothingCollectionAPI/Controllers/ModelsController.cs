@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LabClothingCollectionAPI.Entities;
 using LabClothingCollectionAPI.Models;
 using LabClothingCollectionAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -47,8 +48,12 @@ namespace LabClothingCollectionAPI.Controllers
                     return Conflict("Nome de modelo já existente");
                 }
             }
+            var model = _mapper.Map<Model>(modelForCreation);
+            _labClothing.CreateModel(model);
+            await _labClothing.SaveChangesAsync();
+            var modelToReturn = _mapper.Map<ModelDto>(model);
 
-            return Ok();
+            return Created(@"http://localhost7258/api/modelos", );
         }
     }
 }
