@@ -43,6 +43,11 @@ namespace LabClothingCollectionAPI.Services
             return await _context.Models.ToListAsync();
         }
 
+        public async Task<IEnumerable<Model>> GetModelsAsync(Layout? layout)
+        {
+            return await _context.Models.Where(Model => Model.Layout == layout).ToListAsync();
+        }
+
         public async Task<Model?> GetModelAsync(int modelId)
         {
             return await _context.Models.Where(c => c.Id == modelId).FirstOrDefaultAsync();
@@ -51,6 +56,11 @@ namespace LabClothingCollectionAPI.Services
         public void CreateModel(Model model)
         {
             _context.Models.Add(model);
+        }
+
+        public void RemoveModel(Model model)
+        {
+            _context.Models.Remove(model);
         }
         #endregion
         #region

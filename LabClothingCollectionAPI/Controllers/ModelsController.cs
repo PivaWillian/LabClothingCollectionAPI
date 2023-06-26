@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LabClothingCollectionAPI.Entities;
+using LabClothingCollectionAPI.Enums;
 using LabClothingCollectionAPI.Models;
 using LabClothingCollectionAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,25 @@ namespace LabClothingCollectionAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels()
+        public async Task<ActionResult<IEnumerable<ModelDto>>> GetModels(Layout? layout)
         {
-            var models = await _labClothing.GetModelsAsync();
+            if(layout == null)
+            {
+                var modelsToReturn = await _labClothing.GetModelsAsync();
+                return Ok(_mapper.Map<IEnumerable<ModelDto>>(modelsToReturn));
+            }
+            var models = await _labClothing.GetModelsAsync(layout);
             return Ok(_mapper.Map<IEnumerable<ModelDto>>(models));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ModelDto?>> GetModel(int modelId)
+        public async Task<ActionResult<ModelDto?>> GetModel(int id)
         {
-            var model = await _labClothing.GetModelAsync(modelId);
+            var model = await _labClothing.GetModelAsync(id);
+            if(model == null)
+            {
+                return NotFound("Não encontrado.");
+            }
             return Ok(model);
         }
 
@@ -41,9 +51,9 @@ namespace LabClothingCollectionAPI.Controllers
                 return BadRequest("Dados informados inválidos");
             }
             var modelsForComparison = await _labClothing.GetModelsAsync();
-            foreach(var model in modelsForComparison)
+            foreach(var modelo in modelsForComparison)
             {
-                if (model.Name == modelForCreation.Name)
+                if (modelo.Name == modelForCreation.Name)
                 {
                     return Conflict("Nome de modelo já existente");
                 }
@@ -53,7 +63,39 @@ namespace LabClothingCollectionAPI.Controllers
             await _labClothing.SaveChangesAsync();
             var modelToReturn = _mapper.Map<ModelDto>(model);
 
-            return Created(@"http://localhost7258/api/modelos", );
+            return Created(@"http://localhost7258/api/modelos", modelToReturn);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ModelDto>> UpdateModel(int id, ModelForUpdateDto modelForUpdate)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Dados informados são inválidos.");
+            }
+            var modelEntity = await _labClothing.GetModelAsync(id);
+            if (modelEntity == null)
+            {
+                return NotFound("Modelo não encontrado.");
+            }
+
+            _mapper.Map(modelForUpdate, modelEntity);
+            await _labClothing.SaveChangesAsync();
+
+            return Ok(modelEntity);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteModel(int id)
+        {
+            var modelToDelete = await _labClothing.GetModelAsync(id);
+            if(modelToDelete == null)
+            {
+                return NotFound("Não encontrado modelo.");
+            }
+            _labClothing.RemoveModel(modelToDelete);
+            await _labClothing.SaveChangesAsync();
+            return NoContent();
         }
     }
 }
