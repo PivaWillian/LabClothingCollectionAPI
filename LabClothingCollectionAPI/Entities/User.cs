@@ -5,7 +5,7 @@ using LabClothingCollectionAPI.Enums;
 
 namespace LabClothingCollectionAPI.Entities
 {
-    public class User
+    public class User: Pessoa
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

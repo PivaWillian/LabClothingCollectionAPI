@@ -80,7 +80,7 @@ namespace LabClothingCollectionAPI.Controllers
             var userCheck = users.Where(x => x.DocNumber == user.DocNumber).FirstOrDefault();
             if(userCheck != null)
             {
-                return Conflict("CPF/CNPJ já cadastrado");
+                return Conflict("CPF/CNPJ já cadastrado.");
             }
             if(!ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace LabClothingCollectionAPI.Controllers
             await _labRepository.SaveChangesAsync();
             var userToReturn = _mapper.Map<UserDto>(userForCreation);
 
-            return Created(@"http://localhost7258/api/usuarios/", $"id = {userToReturn.Id} e tipo = {userToReturn.UserType}" );
+            return Created(@"http://localhost7258/api/usuarios/", userToReturn );
         }
 
         /// <summary>
@@ -104,7 +104,8 @@ namespace LabClothingCollectionAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id, UserForUpdateDto userForUpdate)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || (userForUpdate.UserType != "Administrador" && userForUpdate.UserType != "Gerente"
+                && userForUpdate.UserType != "Criador" && userForUpdate.UserType != "Outro"))
             {
                 return BadRequest("Informações repassadas inválidas");
             }
